@@ -1,9 +1,9 @@
-# 🚀 QuickCollect – Plataforma de Pagos y Suscripciones Recurrentes  
+#  QuickCollect – Plataforma de Pagos y Suscripciones Recurrentes  
 **Proyecto académico y profesional** – Universidad Compensar – 2025  
 
 ---
 
-## 🧠 Descripción General
+## Descripción General
 
 **QuickCollect** es una aplicación web desarrollada con **Django + Django REST Framework (DRF)**  
 diseñada para la gestión integral de suscripciones, pagos recurrentes y notificaciones automáticas.
@@ -37,42 +37,42 @@ quickcollect/
 
 ---
 
-## ⚙️ Instalación y Ejecución Local
+## Instalación y Ejecución Local
 
-### 1️⃣ Clonar el repositorio
+### 1️ Clonar el repositorio
 ```bash
 git clone https://github.com/cristiannwtf1/quickcollect.git
 cd quickcollect
 ```
 
-### 2️⃣ Crear entorno virtual
+### 2️ Crear entorno virtual
 ```bash
 python -m venv venv
 venv\Scripts\activate      # Windows
 # source venv/bin/activate  # Linux / Mac
 ```
 
-### 3️⃣ Instalar dependencias
+### 3️Instalar dependencias
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4️⃣ Aplicar migraciones
+### 4️Aplicar migraciones
 ```bash
 python manage.py migrate
 ```
 
-### 5️⃣ Ejecutar el servidor
+### 5️ Ejecutar el servidor
 ```bash
 python manage.py runserver
 ```
 
 Servidor disponible en:  
-🔗 http://127.0.0.1:8000/
+ http://127.0.0.1:8000/
 
 ---
 
-## 📡 Endpoints REST Principales
+##  Endpoints REST Principales
 
 | Descripción | Método | Endpoint |
 |--------------|---------|----------|
@@ -88,7 +88,7 @@ Servidor disponible en:
 
 ---
 
-## 🔔 Ejemplo: Simular Notificación
+##  Ejemplo: Simular Notificación
 
 ### Solicitud
 ```
@@ -117,11 +117,11 @@ POST /api/notificaciones/simular/
 }
 ```
 
-💡 Si no se envía el campo `pago`, el sistema selecciona automáticamente el pago más reciente con estado **pendiente** o **vencido**.
+ Si no se envía el campo `pago`, el sistema selecciona automáticamente el pago más reciente con estado **pendiente** o **vencido**.
 
 ---
 
-## 📊 Dashboard – KPIs Incluidos
+##  Dashboard – KPIs Incluidos
 
 - Total de usuarios, planes y suscripciones.  
 - Montos totales y por estado de pago.  
@@ -132,7 +132,7 @@ POST /api/notificaciones/simular/
 
 ---
 
-## 🧩 Ejemplo de Respuesta del Dashboard
+##  Ejemplo de Respuesta del Dashboard
 
 ```json
 {
@@ -152,7 +152,7 @@ POST /api/notificaciones/simular/
 
 ---
 
-## 🧰 Requerimientos Técnicos
+##  Requerimientos Técnicos
 
 | Componente | Versión mínima |
 |-------------|----------------|
@@ -163,7 +163,7 @@ POST /api/notificaciones/simular/
 
 ---
 
-## 👨‍💻 Autor Técnico
+##  Autor Técnico
 
 **Cristian Guiovany Cubillos Olarte**  
 Estudiante de Ingeniería de Sistemas  
@@ -173,18 +173,18 @@ Estudiante de Ingeniería de Sistemas
 
 ---
 
-## 🎓 Sección Universitaria
+## Sección Universitaria
 
 ### Proyecto Final – Ingeniería de Sistemas  
 **Asignatura:** Proyecto Integrador / Prácticas Profesionales  
 **Docente:** _(por definir)_  
 **Periodo:** 2025-II  
 
-#### 📚 Descripción académica
+#### Descripción académica
 
 QuickCollect es un sistema de información diseñado como **prototipo funcional** para demostrar competencias en el desarrollo de software empresarial, aplicando buenas prácticas de ingeniería, arquitectura por capas, y principios REST.
 
-#### 🧱 Objetivos específicos
+#### Objetivos específicos
 
 1. Implementar un backend en Django con estructura modular.  
 2. Incorporar autenticación y CRUDs base de datos relacionales.  
@@ -192,7 +192,7 @@ QuickCollect es un sistema de información diseñado como **prototipo funcional*
 4. Simular notificaciones automáticas de recordatorio de pago.  
 5. Versionar y documentar el código en GitHub.
 
-#### 🧩 Resultados obtenidos
+####  Resultados obtenidos
 
 - API REST funcional, con persistencia de datos.  
 - Panel de métricas dinámico.  
@@ -201,7 +201,7 @@ QuickCollect es un sistema de información diseñado como **prototipo funcional*
 
 ---
 
-## 🛡️ Licencia
+##  Licencia
 
 Proyecto de carácter **educativo y demostrativo**, libre para análisis o reutilización académica.
 
