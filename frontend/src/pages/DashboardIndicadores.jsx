@@ -14,7 +14,7 @@ import {
   Legend,
 } from "recharts";
 import { TrendingUp, PieChart, Users, DollarSign, LogOutIcon } from "lucide-react";
-import { getDashboard } from "../api";
+import { getDashboard } from "../services/api";
 
 export default function DashboardIndicadores() {
   const navigate = useNavigate();
