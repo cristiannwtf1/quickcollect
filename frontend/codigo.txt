@@ -1,0 +1,369 @@
+// src/pages/Home.jsx
+import React from "react";
+import { Link } from "react-router-dom";
+
+export default function Home() {
+  return (
+    <div className="flex flex-col min-h-screen bg-gray-50">
+      {/* Hero Section */}
+      <section className="bg-indigo-600 text-white text-center py-20 px-6">
+        <h1 className="text-4xl md:text-5xl font-bold mb-4">
+          Automatiza tus Cobros Recurrentes
+        </h1>
+        <p className="max-w-2xl mx-auto text-lg mb-8">
+          La solución completa para Pymes colombianas que buscan optimizar sus procesos 
+          de facturación y cobro. Reduce la morosidad, mejora tu flujo de caja 
+          y dedica más tiempo a hacer crecer tu negocio.
+        </p>
+        <div className="flex justify-center gap-4">
+          <Link
+            to="/portafolio"
+            className="px-6 py-3 bg-white text-indigo-700 font-semibold rounded hover:bg-indigo-100"
+          >
+            Ver Portafolio
+          </Link>
+          <Link
+            to="/planes"
+            className="px-6 py-3 bg-indigo-800 font-semibold rounded border border-white hover:bg-indigo-700"
+          >
+            Planes
+          </Link>
+      
+        </div>
+      </section>
+
+      {/* Beneficios */}
+      <section className="py-16 bg-white">
+        <div className="text-center mb-10">
+          <h2 className="text-3xl font-bold text-gray-800 mb-4">
+            ¿Por qué Elegir QuickCollect?
+          </h2>
+          <p className="text-gray-600">
+            Diseñado específicamente para las necesidades de las Pymes colombianas.
+          </p>
+        </div>
+
+        <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-8 px-6">
+          <div className="bg-indigo-50 p-6 rounded-lg shadow hover:shadow-lg transition">
+            <h3 className="text-xl font-semibold mb-3 text-indigo-700">
+              Automatización Completa
+            </h3>
+            <p className="text-gray-600">
+              Programa tus cobros y olvida las tareas repetitivas. 
+              El sistema se encarga de todo.
+            </p>
+          </div>
+
+          <div className="bg-indigo-50 p-6 rounded-lg shadow hover:shadow-lg transition">
+            <h3 className="text-xl font-semibold mb-3 text-indigo-700">
+              Mejora tu Flujo de Caja
+            </h3>
+            <p className="text-gray-600">
+              Reduce la morosidad hasta un 70% con recordatorios automáticos y seguimiento inteligente.
+            </p>
+          </div>
+
+          <div className="bg-indigo-50 p-6 rounded-lg shadow hover:shadow-lg transition">
+            <h3 className="text-xl font-semibold mb-3 text-indigo-700">
+              Reportes Detallados
+            </h3>
+            <p className="text-gray-600">
+              Analiza el comportamiento de tus clientes y toma decisiones basadas en datos reales.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-gray-900 text-gray-200 py-8 px-6">
+        <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-6">
+          <div>
+            <h3 className="text-lg font-semibold text-white mb-2">QuickCollect</h3>
+            <p className="text-gray-400 text-sm">
+              Transformando la gestión de cobros para las Pymes colombianas.
+            </p>
+          </div>
+
+          <div>
+            <h4 className="font-semibold text-white mb-2">Contacto</h4>
+            <p className="text-gray-400 text-sm">📧 info@quickcollect.co</p>
+            <p className="text-gray-400 text-sm">📞 +57 (1) 234-5678</p>
+            <p className="text-gray-400 text-sm">📍 Bogotá, Colombia</p>
+          </div>
+
+          <div className="text-gray-400 text-sm text-center md:text-right">
+            © {new Date().getFullYear()} QuickCollect. Todos los derechos reservados.
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
+
+
+// src/routes/AppRouter.jsx
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "../pages/Home";
+import Login from "../pages/Login";
+import Register from "../pages/Register";
+import Planes from "../pages/Planes";
+import ResumenPlan from "../pages/ResumenPlan";
+import Confirmacion from "../pages/Confirmacion";
+import PasarelaPago from "../pages/PasarelaPago";
+import DashboardSuscripcion from "../pages/DashboardSuscripcion";
+import Soporte from "../pages/Soporte";
+import Layout from "../layout/Layout";
+
+export default function AppRouter() {
+  return (
+    <Router>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/registro" element={<Register />} />
+          <Route path="/planes" element={<Planes />} />
+          <Route path="/resumen-plan" element={<ResumenPlan />} />
+          <Route path="/pasarela" element={<PasarelaPago />} />
+          <Route path="/confirmacion" element={<Confirmacion />} />
+          <Route path="/dashboard-suscripcion" element={<DashboardSuscripcion />} />
+          <Route path="/soporte" element={<Soporte />} />
+        </Routes>
+      </Layout>
+    </Router>
+  );
+}
+
+// src/pages/Portafolio.jsx
+import React from "react";
+import { Link } from "react-router-dom";
+
+export default function Portafolio() {
+  return (
+    <div className="min-h-screen bg-gray-50 text-gray-800">
+
+      {/* HERO */}
+      <section className="text-center py-20 px-6 bg-indigo-600 text-white">
+        <h1 className="text-4xl md:text-5xl font-bold mb-4">
+          Resultados que hablan
+        </h1>
+        <p className="max-w-2xl mx-auto text-lg">
+          Hasta <strong>70% menos de morosidad</strong> gracias a cobros automáticos
+          y recordatorios inteligentes.
+        </p>
+      </section>
+
+      {/* INDUSTRIAS */}
+      <section className="py-16 px-6 max-w-6xl mx-auto">
+        <h2 className="text-3xl font-bold text-center mb-10">
+          Solución para diferentes industrias
+        </h2>
+
+        <div className="grid md:grid-cols-3 gap-6">
+          {[
+            { icon: "🏋️‍♂️", title: "Gimnasios", text: "Cuotas mensuales sin retrasos." },
+            { icon: "🏥", title: "EPS y Salud", text: "Pagos recurrentes sin llamadas." },
+            { icon: "🏫", title: "Colegios Privados", text: "Control total de mensualidades." },
+            { icon: "💃", title: "Academias de Baile", text: "Pagos automáticos por estudiante." },
+            { icon: "⚽", title: "Escuelas de Fútbol", text: "Reduce morosidad en mensualidades." },
+            { icon: "📚", title: "Cursos y Academias", text: "Facturación recurrente fácil." },
+          ].map((item, i) => (
+            <div
+              key={i}
+              className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition text-center"
+            >
+              <div className="text-5xl mb-3">{item.icon}</div>
+              <h3 className="text-xl font-semibold mb-2 text-indigo-700">{item.title}</h3>
+              <p className="text-gray-600">{item.text}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* CASOS DE EXITO */}
+      <section className="py-16 bg-white px-6">
+        <h2 className="text-3xl font-bold text-center mb-10">Casos de Éxito</h2>
+
+        <div className="grid md:grid-cols-3 max-w-6xl mx-auto gap-6">
+          {[
+            { title: "Gimnasio FitLife", result: "70% menos de morosidad" },
+            { title: "Colegio San Marcos", result: "Pagos al día en 90% de las familias" },
+            { title: "Academia DancePro", result: "Cobros automatizados 24/7" },
+          ].map((item, i) => (
+            <div
+              key={i}
+              className="p-6 bg-indigo-50 rounded-xl shadow text-center hover:shadow-lg transition"
+            >
+              <h3 className="font-semibold text-xl mb-2 text-indigo-700">
+                {item.title}
+              </h3>
+              <p className="text-gray-700">{item.result}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* TESTIMONIOS */}
+      <section className="py-16 px-6 max-w-5xl mx-auto">
+        <h2 className="text-3xl font-bold text-center mb-10">
+          Lo que dicen nuestros clientes
+        </h2>
+
+        <div className="grid md:grid-cols-2 gap-6">
+          {[
+            {
+              text: `"Antes llamábamos a cada cliente. Ahora todo es automático."`,
+              author: "Laura Gómez — FitLife",
+            },
+            {
+              text: `"Los padres ahora pagan a tiempo. Fue un cambio total."`,
+              author: "Rector San Marcos",
+            },
+          ].map((t, i) => (
+            <blockquote
+              key={i}
+              className="bg-white p-6 rounded-xl shadow italic text-gray-700"
+            >
+              {t.text}
+              <div className="text-right font-semibold text-indigo-700 mt-2">
+                {t.author}
+              </div>
+            </blockquote>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA FINAL */}
+      <section className="py-20 bg-indigo-600 text-center text-white">
+        <h2 className="text-3xl md:text-4xl font-bold mb-4">
+          ¿Listo para automatizar tus cobros?
+        </h2>
+        <p className="mb-8 text-lg opacity-90">
+          Comienza hoy y transforma tus finanzas.
+        </p>
+        <Link
+          to="/planes"
+          className="bg-white text-indigo-700 font-semibold px-8 py-3 rounded hover:bg-indigo-100 transition"
+        >
+          Ver Planes
+        </Link>
+      </section>
+    </div>
+  );
+}
+
+
+
+App.jsx
+
+export default function App() {
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
+      <h1 className="text-4xl font-extrabold text-blue-600">
+        Tailwind CSS funcionando ✅
+      </h1>
+      <p className="mt-4 text-gray-600">Si ves este estilo, la instalación fue exitosa.</p>
+      <button className="mt-6 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+        Botón de prueba
+      </button>
+    </div>
+  )
+}
+
+app.jsx
+
+// src/layout/Layout.jsx
+import React from "react";
+import { Link } from "react-router-dom";
+
+export default function Layout({ children }) {
+  return (
+    <div className="flex flex-col min-h-screen bg-gray-50 text-gray-800">
+      
+      {/* NAVBAR */}
+      <header className="bg-white border-b shadow-sm">
+        <div className="max-w-7xl mx-auto flex justify-between items-center py-3 px-6">
+
+          {/* Logo */}
+          <div className="flex items-center gap-2">
+            <div className="bg-indigo-600 text-white px-2 py-1 rounded font-bold text-xl">
+              $
+            </div>
+            <h1 className="text-xl font-bold text-gray-800">
+              <Link to="/">Quick Collect</Link>
+            </h1>
+          </div>
+
+          {/* Menú */}
+          <nav className="flex items-center gap-6">
+           
+            <Link to="/soporte" className="text-gray-700 hover:text-indigo-600 font-medium">
+              Soporte
+            </Link>
+
+            <Link
+              to="/login"
+              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+            >
+              Iniciar Sesión
+            </Link>
+
+            <Link
+              to="/registro"
+              className="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600 transition"
+            >
+              Registrarse
+            </Link>
+          </nav>
+
+        </div>
+      </header>
+
+      {/* CONTENIDO CENTRAL */}
+      <main className="flex-grow">{children}</main>
+
+      {/* 👇 AQUÍ VA EL DIV QUE FALTABA */}
+    </div>
+  );
+}
+
+
+// src/routes/AppRouter.jsx
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import Home from "../pages/Home";
+import Login from "../pages/Login";
+import Register from "../pages/Register";
+import Planes from "../pages/Planes";
+import ResumenPlan from "../pages/ResumenPlan";
+import Confirmacion from "../pages/Confirmacion";
+import PasarelaPago from "../pages/PasarelaPago";
+import DashboardSuscripcion from "../pages/DashboardSuscripcion";
+import Soporte from "../pages/Soporte";
+import Portafolio from "../pages/Portafolio";
+import Layout from "../layout/Layout";
+
+export default function AppRouter() {
+  return (
+    <Router>
+      <Routes>
+        <Route element={<Layout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/registro" element={<Register />} />
+          <Route path="/planes" element={<Planes />} />
+          <Route path="/resumen-plan" element={<ResumenPlan />} />
+          <Route path="/pasarela" element={<PasarelaPago />} />
+          <Route path="/confirmacion" element={<Confirmacion />} />
+          <Route path="/dashboard-suscripcion" element={<DashboardSuscripcion />} />
+          <Route path="/soporte" element={<Soporte />} />
+          <Route path="/portafolio" element={<Portafolio />} />
+        </Route>
+
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </Router>
+  );
+}
+

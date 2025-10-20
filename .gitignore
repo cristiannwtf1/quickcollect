@@ -5,3 +5,7 @@ __pycache__/
 node_modules/
 build/
 dist/
+*.code-workspace
+frontend/node_modules/
+frontend/.env
+frontend/.env.local
