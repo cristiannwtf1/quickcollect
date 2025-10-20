@@ -1,37 +1,25 @@
 // src/pages/Reportes.jsx
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import {
-  Edit,
-  Bell,
-  Trash2,
-  RefreshCcw,
-  FileSpreadsheet,
-  PlusCircle,
-} from "lucide-react";
+import { Edit, Bell, Trash2, RefreshCcw, FileSpreadsheet, PlusCircle } from "lucide-react";
 import * as XLSX from "xlsx";
+import { getReportePagos } from "../services/api";
 
 export default function Reportes() {
   const navigate = useNavigate();
 
-  // Datos de ejemplo
-  const [clientes, setClientes] = useState([
-    { id: 1, nombre: "Gimnasio FitLife", tipo: "Mensual", monto: 250000, estado: "Pagado", fecha: "2025-10-10" },
-    { id: 2, nombre: "Colegio San Marcos", tipo: "Anual", monto: 1800000, estado: "Pendiente", fecha: "2025-10-14" },
-    { id: 3, nombre: "Academia DancePro", tipo: "Mensual", monto: 320000, estado: "Vencido", fecha: "2025-09-30" },
-    { id: 4, nombre: "Farmacia San José", tipo: "Trimestral", monto: 500000, estado: "Pagado", fecha: "2025-10-05" },
-    { id: 5, nombre: "Tienda La Esquina", tipo: "Mensual", monto: 210000, estado: "Pendiente", fecha: "2025-10-12" },
-    { id: 6, nombre: "Peluquería Bella", tipo: "Mensual", monto: 190000, estado: "Vencido", fecha: "2025-09-27" },
-    { id: 7, nombre: "Restaurante Sabor", tipo: "Anual", monto: 2100000, estado: "Inactivo", fecha: "2025-08-20" },
-    { id: 8, nombre: "Clínica Vida Plena", tipo: "Trimestral", monto: 620000, estado: "Pagado", fecha: "2025-10-08" },
-    { id: 9, nombre: "Escuela Fútbol Pro", tipo: "Mensual", monto: 280000, estado: "Pendiente", fecha: "2025-10-11" },
-    { id: 10, nombre: "Academia ArteVivo", tipo: "Anual", monto: 1500000, estado: "Inactivo", fecha: "2025-07-05" },
-  ]);
+  // Datos provenientes del backend
+  const [clientes, setClientes] = useState([]); // aquí guardaremos los pagos transformados a tu estructura de UI
 
-  const [filtroEstado, setFiltroEstado] = useState([]);
-  const [fechaInicio, setFechaInicio] = useState("");
-  const [fechaFin, setFechaFin] = useState("");
+  // Filtros
+  const [estado, setEstado] = useState("");         // "", "APROBADO", "PENDIENTE", "RECHAZADO", "VENCIDO"
+  const [suscripcion, setSuscripcion] = useState(""); // id numérica
+  const [fechaInicio, setFechaInicio] = useState(""); // YYYY-MM-DD
+  const [fechaFin, setFechaFin] = useState("");       // YYYY-MM-DD
+
   const [mostrarModal, setMostrarModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [err, setErr] = useState("");
 
   // Formulario cliente nuevo
   const [nuevoCliente, setNuevoCliente] = useState({
@@ -48,41 +36,10 @@ export default function Reportes() {
     diaCobro: "",
   });
 
-  const handleFiltroEstado = (e) => {
-    const selected = Array.from(e.target.selectedOptions, (opt) => opt.value);
-    setFiltroEstado(selected);
-  };
-
   const handleActivar = (id) => {
     setClientes((prev) =>
       prev.map((c) => (c.id === id ? { ...c, estado: "Pendiente" } : c))
     );
-  };
-
-  // Filtro dinámico
-  const clientesFiltrados = useMemo(() => {
-    return clientes.filter((c) => {
-      const matchEstado = filtroEstado.length === 0 || filtroEstado.includes(c.estado);
-      const matchFechaInicio = !fechaInicio || c.fecha >= fechaInicio;
-      const matchFechaFin = !fechaFin || c.fecha <= fechaFin;
-      return matchEstado && matchFechaInicio && matchFechaFin;
-    });
-  }, [clientes, filtroEstado, fechaInicio, fechaFin]);
-
-  const totalMonto = clientesFiltrados.reduce((sum, c) => sum + c.monto, 0);
-
-  const exportarExcel = () => {
-    const datos = clientesFiltrados.map((c) => ({
-      Cliente: c.nombre,
-      Tipo: c.tipo,
-      Monto: c.monto,
-      Estado: c.estado,
-      Fecha: c.fecha,
-    }));
-    const ws = XLSX.utils.json_to_sheet(datos);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Reportes");
-    XLSX.writeFile(wb, "reporte_quickcollect.xlsx");
   };
 
   const handleRegistrarCliente = (e) => {
@@ -110,6 +67,88 @@ export default function Reportes() {
       frecuencia: "Mensual",
       diaCobro: "",
     });
+  };
+
+  // Helper: formatea moneda
+  const money = (n) => Number(n ?? 0).toLocaleString("es-CO", {
+    style: "currency",
+    currency: "COP",
+    maximumFractionDigits: 0,
+  });
+
+  // Pide datos al backend con los filtros
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      setErr("");
+      const params = {};
+      if (estado) params.estado = estado;
+      if (suscripcion) params.suscripcion = suscripcion;
+      if (fechaInicio) params.desde = fechaInicio;
+      if (fechaFin) params.hasta = fechaFin;
+
+      const res = await getReportePagos(params);
+      // El endpoint devuelve paginación + payload dentro de "results"
+      // { count, next, previous, results: { items: [...], total_monto, count } }
+      const payload = res.data?.results ?? res.data;
+
+      const items = (payload.items || []).map(p => ({
+        id: p.id,
+        suscripcionId: p.suscripcion,           // 👈 guarda el id aquí
+        nombre: `Suscripción #${p.suscripcion}`, // no tenemos razón social en el Pago, así que mostramos el id
+        tipo: "-",                                // si más adelante quieres, aquí mapeas plan/periodicidad
+        monto: Number(p.monto),
+        estado: (
+          p.estado === "APROBADO" ? "Pagado" :
+          p.estado === "PENDIENTE" ? "Pendiente" :
+          p.estado === "RECHAZADO" ? "Vencido" : "Pendiente"
+        ),
+        fecha: new Date(p.fecha_hora).toISOString().slice(0,10),
+      }));
+
+      setClientes(items);
+    } catch (e) {
+      console.error(e);
+      setErr("No se pudo cargar el reporte.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Carga inicial sin filtros
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Mantén tu lógica de filtros en memoria, pero ahora basada en lo que llega del backend
+  const clientesFiltrados = useMemo(() => {
+    return clientes.filter((c) => {
+      const matchFechaInicio = !fechaInicio || c.fecha >= fechaInicio;
+      const matchFechaFin = !fechaFin || c.fecha <= fechaFin;
+      // estado ya lo filtra el backend, pero si el usuario cambia sin aplicar, mantenemos coherencia visual:
+      const matchEstado = !estado || (estado === "APROBADO" && c.estado === "Pagado")
+                                   || (estado === "PENDIENTE" && c.estado === "Pendiente")
+                                   || (estado === "RECHAZADO" && c.estado === "Vencido")
+                                   || (estado === "VENCIDO" && c.estado === "Vencido");
+      return matchFechaInicio && matchFechaFin && matchEstado;
+    });
+  }, [clientes, fechaInicio, fechaFin, estado]);
+
+  const totalMonto = clientesFiltrados.reduce((sum, c) => sum + (Number(c.monto) || 0), 0);
+
+  const exportarExcel = () => {
+    const datos = clientesFiltrados.map((c) => ({
+      Cliente: c.nombre,
+      Tipo: c.tipo,
+      Monto: c.monto,
+      Estado: c.estado,
+      Fecha: c.fecha,
+    }));
+    const ws = XLSX.utils.json_to_sheet(datos);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Reportes");
+    XLSX.writeFile(wb, "reporte_quickcollect.xlsx");
   };
 
   return (
@@ -151,16 +190,25 @@ export default function Reportes() {
         <div className="bg-white p-5 rounded-lg shadow mb-8">
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-lg font-semibold text-gray-800">Filtros de búsqueda</h3>
-            <button
-              onClick={exportarExcel}
-              className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition"
-            >
-              <FileSpreadsheet size={18} /> Exportar Excel
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={exportarExcel}
+                className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition"
+              >
+                <FileSpreadsheet size={18} /> Exportar Excel
+              </button>
+
+              <button
+                onClick={fetchData}
+                className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg transition"
+              >
+                Aplicar
+              </button>
+            </div>
           </div>
 
           <div className="grid md:grid-cols-4 gap-6">
-            {/* Cliente */}
+            {/* Cliente (buscar) */}
             <div>
               <label className="block text-sm font-medium mb-1 text-gray-700">
                 Buscar Cliente
@@ -178,14 +226,15 @@ export default function Reportes() {
                 Estado del pago
               </label>
               <select
-                multiple
-                onChange={handleFiltroEstado}
+                value={estado}
+                onChange={(e) => setEstado(e.target.value)}
                 className="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-indigo-500"
               >
-                <option value="Pagado">Pagado</option>
-                <option value="Pendiente">Pendiente</option>
-                <option value="Vencido">Vencido</option>
-                <option value="Inactivo">Inactivo</option>
+                <option value="">(Todos)</option>
+                <option value="APROBADO">Aprobado</option>
+                <option value="PENDIENTE">Pendiente</option>
+                <option value="RECHAZADO">Rechazado</option>
+                <option value="VENCIDO">Vencido</option>
               </select>
             </div>
 
@@ -229,12 +278,26 @@ export default function Reportes() {
               </tr>
             </thead>
             <tbody>
-              {clientesFiltrados.map((c) => (
+              {loading && (
+                <tr><td className="p-3" colSpan={6}>Cargando…</td></tr>
+              )}
+              {!loading && err && (
+                <tr><td className="p-3 text-red-600" colSpan={6}>{err}</td></tr>
+              )}
+              {!loading && !err && clientesFiltrados.map((c) => (
                 <tr key={c.id} className="border-b hover:bg-gray-50">
-                  <td className="p-3">{c.nombre}</td>
+                  <td className="p-3">
+                    <Link
+                      to={`/dashboard-suscripcion?s=${c.suscripcionId}`}
+                      className="text-indigo-600 hover:underline"
+                      title="Ver pagos de esta suscripción"
+                    >
+                      {c.nombre}
+                    </Link>
+                  </td>
                   <td className="p-3">{c.tipo}</td>
                   <td className="p-3 font-medium text-gray-800">
-                    ${c.monto.toLocaleString()}
+                    {money(c.monto)}
                   </td>
                   <td
                     className={`p-3 font-semibold ${
@@ -289,7 +352,7 @@ export default function Reportes() {
                 <td colSpan="2" className="p-3 text-right">
                   Total
                 </td>
-                <td className="p-3">${totalMonto.toLocaleString()}</td>
+                <td className="p-3">{money(totalMonto)}</td>
                 <td colSpan="3"></td>
               </tr>
             </tfoot>
