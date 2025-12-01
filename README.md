@@ -1,3 +1,6 @@
+LINK DEL VIDEO DE PRESENTACIÓN: https://www.youtube.com/watch?v=4KCTRheISQo&t=1s
+
+
 #  QuickCollect – Plataforma de Pagos y Suscripciones Recurrentes  
 **Proyecto académico y profesional** – Universidad Compensar – 2025  
 
